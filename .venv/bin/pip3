@@ -1,5 +1,5 @@
 #!/bin/sh
-'''exec' "/Users/jadenadu/Library/CloudStorage/OneDrive-Nexus365/Year 3/B1/B1-Scientific-Coding/.venv/bin/python" "$0" "$@"
+'''exec' "/Users/jadenadu/Desktop/python/year3 scientific coding/B1-Scientific-Coding/.venv/bin/python" "$0" "$@"
 ' '''
 # -*- coding: utf-8 -*-
 import re

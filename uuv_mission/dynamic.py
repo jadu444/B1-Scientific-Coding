@@ -91,7 +91,7 @@ class ClosedLoop:
         self.plant = plant
         self.controller = controller
 
-    def simulate(self,  mission: Mission, disturbances: np.ndarray) -> Trajectory:
+    def simulate(self, mission: Mission, disturbances: np.ndarray) -> Trajectory:
 
         T = len(mission.reference)
         if len(disturbances) < T:

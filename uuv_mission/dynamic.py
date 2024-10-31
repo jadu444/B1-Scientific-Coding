@@ -112,4 +112,28 @@ class ClosedLoop:
         
     def simulate_with_random_disturbances(self, mission: Mission, variance: float = 0.5) -> Trajectory:
         disturbances = np.random.normal(0, variance, len(mission.reference))
-        return self.simulate(mission, disturbances)
+        trajectory = self.simulate(mission, disturbances)
+        self.calculate_performance_metrics(trajectory, mission)
+        return trajectory
+
+    def calculate_performance_metrics(self, trajectory: Trajectory, mission: Mission):
+        position_y = trajectory.position[:, 1]
+        reference_y = mission.reference
+        T = len(reference_y)
+
+        # Overshoot calculation
+        max_deviation = np.max(np.abs(position_y - reference_y))
+        overshoot = (max_deviation / np.max(np.abs(reference_y))) * 100  # as a percentage
+
+        # Steady-state error (last value error)
+        steady_state_error = np.abs(position_y[-1] - reference_y[-1])
+
+        # Settling time (using a tolerance band of 2% around the reference)
+        tolerance = 0.02
+        within_tolerance = np.abs(position_y - reference_y) < tolerance * np.abs(reference_y)
+        settling_time = next((i for i in range(T - 1, 0, -1) if not within_tolerance[i]), T - 1) + 1
+
+        # Output the performance metrics
+        print(f"Overshoot: {overshoot:.2f}%")
+        print(f"Steady-State Error: {steady_state_error:.2f}")
+        print(f"Settling Time: {settling_time * self.plant.dt:.2f} seconds")
